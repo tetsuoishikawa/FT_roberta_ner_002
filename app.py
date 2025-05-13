@@ -32,14 +32,14 @@ def mask_entities(text, entities):
     return masked_text
 
 # アプリ UI
-st.title("🩺 日本語 医療会話 NER アプリ（改良版・色付きラベル）")
+st.title("🩺 日本語 医療会話 NER アプリ")
 
 # 入力フォーム
-text = st.text_area("【①】解析したいテキストを入力してください（500文字まで）:", 
+text = st.text_area("解析したいテキストを入力してください（500文字まで）:", 
                     "金丸先生が松本市にある石川クリニックに通院しました。", max_chars=500)
 
 # 解析ボタン
-if st.button("【②】解析開始"):
+if st.button("解析開始"):
     with st.spinner("解析中..."):
         results = ner_pipeline(text)
         
@@ -47,10 +47,10 @@ if st.button("【②】解析開始"):
         masked_text = mask_entities(text, results)
 
         # 結果表示
-        st.subheader("【③a】📝 仮名加工（マスキング）後の文章")
+        st.subheader("📝 仮名加工（マスキング）後の文章")
         st.markdown(masked_text, unsafe_allow_html=True)
 
-        st.subheader("【③b】🔍 抽出したエンティティ一覧")
+        st.subheader("🔍 抽出したエンティティ一覧")
         if results:
             for entity in results:
                 st.write(f"- **{entity['word']}** → {entity['entity_group']} (信頼度: {entity['score']:.2f})")
