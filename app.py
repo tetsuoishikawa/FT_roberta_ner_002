@@ -4,7 +4,11 @@ import re
 
 # モデルの読み込み
 MODEL_REPO = "Tetsuo3003/ner-medical-japanese"
-tokenizer = AutoTokenizer.from_pretrained(MODEL_REPO)
+tokenizer = AutoTokenizer.from_pretrained(
+    MODEL_REPO,
+    use_fast=False  # ← Fast Tokenizer を無効化（重要！）
+)
+#    tokenizer = AutoTokenizer.from_pretrained(MODEL_REPO)
 model = AutoModelForTokenClassification.from_pretrained(
     MODEL_REPO,
     low_cpu_mem_usage=False  # Meta Device を無効化
