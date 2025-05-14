@@ -5,8 +5,17 @@ import re
 # モデルの読み込み
 MODEL_REPO = "Tetsuo3003/ner-medical-japanese"
 tokenizer = AutoTokenizer.from_pretrained(MODEL_REPO)
-model = AutoModelForTokenClassification.from_pretrained(MODEL_REPO)
+model = AutoModelForTokenClassification.from_pretrained(
+    MODEL_REPO,
+    low_cpu_mem_usage=False  # Meta Device を無効化
+)
 ner_pipeline = pipeline("ner", model=model, tokenizer=tokenizer, aggregation_strategy="simple")
+
+# モデルの読み込み
+#MODEL_REPO = "Tetsuo3003/ner-medical-japanese"
+#tokenizer = AutoTokenizer.from_pretrained(MODEL_REPO)
+#model = AutoModelForTokenClassification.from_pretrained(MODEL_REPO)
+#ner_pipeline = pipeline("ner", model=model, tokenizer=tokenizer, aggregation_strategy="simple")
 
 # ラベルごとの色設定
 LABEL_COLORS = {
@@ -35,14 +44,14 @@ def mask_entities(text, entities):
 st.title("🩺 日本語 医療会話 NER アプリ")
 
 # 入力フォーム
-text = st.text_area("解析したいテキストを入力してください（500文字まで）:", 
+text = st.text_area("解析したいテキストを入力してください（500文字まで）:",
                     "金丸先生が松本市にある石川クリニックに通院しました。", max_chars=500)
 
 # 解析ボタン
 if st.button("解析開始"):
     with st.spinner("解析中..."):
         results = ner_pipeline(text)
-        
+
         # 仮名加工（マスキング＋色付き）
         masked_text = mask_entities(text, results)
 
